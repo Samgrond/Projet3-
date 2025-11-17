@@ -333,3 +333,131 @@ Pour ton objectif — **expérimenter en toute sécurité sur une machine virtue
 Si tu veux, je peux te préparer **un petit guide étape par étape pour installer CompreFace dans une VM Linux sécurisée et tester des visages locaux**, avec les commandes exactes et des exemples de tests simples.
 
 Veux‑tu que je fasse ça ?
+
+# Peux-tu m'aider avec l'installaiton de CompreFace?
+
+Bien sûr ! Voici un **guide étape par étape** pour installer **CompreFace** dans une **VM Linux** (Ubuntu/Debian) de façon sécurisée, en utilisant Docker. Je vais détailler chaque étape pour que ce soit clair et opérationnel.
+
+---
+
+## **Prérequis**
+
+1. Une VM Linux (Ubuntu 20.04+ recommandé).
+2. Accès root ou sudo.
+3. Connexion internet temporaire pour télécharger Docker et CompreFace (peut être désactivée après l’installation pour la sécurité).
+
+---
+
+## **Étape 1 : Mettre à jour le système**
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install git curl -y
+```
+
+---
+
+## **Étape 2 : Installer Docker**
+
+1. Installer les dépendances :
+
+```bash
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+```
+
+2. Ajouter le dépôt Docker :
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+```
+
+3. Installer Docker :
+
+```bash
+sudo apt install docker-ce docker-ce-cli containerd.io -y
+```
+
+4. Vérifier l’installation :
+
+```bash
+docker --version
+```
+
+5. Installer Docker Compose (v2) :
+
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+```
+
+---
+
+## **Étape 3 : Télécharger CompreFace**
+
+```bash
+git clone https://github.com/exadel-inc/CompreFace.git
+cd CompreFace
+```
+
+---
+
+## **Étape 4 : Lancer CompreFace avec Docker**
+
+1. Aller dans le dossier `docker` :
+
+```bash
+cd docker
+```
+
+2. Lancer le serveur :
+
+```bash
+docker-compose up -d
+```
+
+> L’option `-d` lance les conteneurs en arrière-plan.
+
+3. Vérifier que les conteneurs tournent :
+
+```bash
+docker ps
+```
+
+Tu devrais voir plusieurs conteneurs CompreFace (API, Frontend, Database).
+
+---
+
+## **Étape 5 : Accéder à l’interface**
+
+1. Ouvre un navigateur sur ta machine hôte et tape :
+
+```
+http://<IP_VM>:8000
+```
+
+Si tu fais tout sur la VM elle-même, tu peux utiliser :
+
+```
+http://localhost:8000
+```
+
+2. La page de login s’affiche. Crée un compte admin directement dans l’interface.
+
+3. Tu peux maintenant **ajouter des visages, tester la détection, et expérimenter avec les API locales**.
+
+---
+
+## **Étape 6 : Sécuriser l’installation**
+
+* Limiter l’accès au port 8000 uniquement à la VM (localhost ou VPN interne).
+* Déconnecter la VM d’internet si tu veux travailler totalement hors ligne.
+* Toutes les données biométriques restent dans le dossier de la VM et les volumes Docker (`docker volume ls` pour les localiser).
+
+---
+
+Si tu veux, je peux te fournir **un petit exemple concret pour tester la reconnaissance faciale avec des images locales** directement depuis CompreFace, pour voir comment ça fonctionne sans coder.
+
+Veux‑tu que je fasse ça ?
