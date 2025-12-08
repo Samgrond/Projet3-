@@ -461,3 +461,85 @@ http://localhost:8000
 Si tu veux, je peux te fournir **un petit exemple concret pour tester la reconnaissance faciale avec des images locales** directement depuis CompreFace, pour voir comment ça fonctionne sans coder.
 
 Veux‑tu que je fasse ça ?
+
+Si tu veux **avoir l’interface graphique (GUI) de CompreFace sur Debian**, bonne nouvelle : CompreFace *n’a pas de GUI à installer séparément*. L’interface Web est fournie automatiquement lorsque tu lances les services via **Docker**.
+
+Voici comment faire étape par étape sur Debian :
+
+---
+
+# ✅ **1. Installer Docker et Docker Compose**
+
+```bash
+sudo apt update
+sudo apt install docker.io docker-compose -y
+sudo systemctl enable --now docker
+```
+
+---
+
+# ✅ **2. Télécharger CompreFace**
+
+Choisis un dossier (par ex. `/opt/compreface`) :
+
+```bash
+sudo mkdir -p /opt/compreface
+cd /opt/compreface
+sudo wget https://raw.githubusercontent.com/exadel-inc/CompreFace/master/docker-compose.yml
+```
+
+*(Tu peux aussi cloner le repo GitHub si tu préfères.)*
+
+---
+
+# ✅ **3. Démarrer CompreFace**
+
+```bash
+sudo docker-compose up -d
+```
+
+Les conteneurs démarrent le backend + l’interface Web.
+
+---
+
+# ✅ **4. Accéder à la GUI**
+
+Une fois lancé, ouvre ton navigateur :
+
+👉 **[http://localhost:8000](http://localhost:8000)**
+
+C’est le **GUI Web de CompreFace**, pas besoin d’autre installation.
+
+---
+
+# 🔧 Problèmes fréquents
+
+### ❗Le port 8000 est occupé
+
+Change le port dans `docker-compose.yml` :
+
+```yaml
+ports:
+  - "8001:8000"
+```
+
+puis :
+
+```bash
+sudo docker-compose down
+sudo docker-compose up -d
+```
+
+Accède alors à :
+👉 `http://localhost:8001`
+
+---
+
+# ❓ Tu veux :
+
+* configurer un reverse proxy (NGINX) ?
+* sécuriser l’accès en HTTPS ?
+* utiliser CompreFace sans Docker ?
+* installer sur Debian en mode production ?
+
+Je peux te guider selon ton besoin.
